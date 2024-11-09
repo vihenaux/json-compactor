@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "description": "The root object of the json file",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Name of the object"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "object-test": {
+      "type": "object",
+      "properties": {
+        "test1": {
+          "type": "integer"
+        },
+        "test2": {
+          "type": "string"
+        },
+        "array-test": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "test3": {
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

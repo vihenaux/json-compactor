@@ -1,0 +1,19 @@
+{
+  "name": "TEST 1",
+  "quantity": 125,
+  "object-test": {
+    "test1": 31,
+    "test2": "Just a test",
+    "array-test": [
+      {
+        "test3": 0
+      },
+      {
+        "test3": 5
+      },
+      {
+        "test3": 2
+      }
+    ]
+  }
+}

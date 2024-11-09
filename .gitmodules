@@ -1,0 +1,3 @@
+[submodule "src/cpp-any-type"]
+	path = src/cpp-any-type
+	url = https://github.com/vihenaux/cpp-any-type.git
