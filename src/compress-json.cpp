@@ -1,7 +1,6 @@
 #include "/*{{{ VALUE GCG_FILLED_VALUE_FILENAME}}}*/"
 #include <fstream>
 #include <iostream>
-#include "cpp-any-type/any.hpp"
 
 /* any first bit : null bit
  * Boolean :
@@ -67,11 +66,46 @@
 
 void compress(std::string & const json_file_path, std::string & const output_path)
 {
-    any_type::Any json_content = any_type::readJson(json_file_path);
-
-    if(json_content.getStatus() != any_type::ANY_OBJECT_STATUS::OK)
+    // Json source file read and checks
+    any_type::Any json = any_type::readJson(json_file_path);
+    if(json.getStatus() == any_type::ANY_OBJECT_STATUS::IMPORT_FAIL)
     {
         std::cerr << "Error : Cannot open json source file at : " << json_file_path << std::endl;
         return;
     }
+    if(json.getStatus() == any_type::ANY_OBJECT_STATUS::KO)
+    {
+        std::cerr << "Error : unexpected json content" << std::endl;
+        return;
+    }
+
+    // Output file opening
+    std::ofstream output(output_path);
+    if(!output.is_open())
+    {
+        std::cerr << "Error : Cannot open output file at : " << output_path << std::endl;
+        return;
+    }
+
+    output << compress_root_node(json);
+
+    output.close();
+}
+
+std::string compress(std::string & const json_content)
+{
+    any_type::Any json = any_type::readJsonStr(json_content);
+
+    if(json.getStatus() == any_type::ANY_OBJECT_STATUS::KO)
+    {
+        std::cerr << "Error : unexpected json content" << std::endl;
+        return;
+    }
+
+    return compress_root_node(json);
+}
+
+std::string compress_root_node(any_type::Any & root_node)
+{
+
 }
