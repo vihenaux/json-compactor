@@ -29,6 +29,7 @@ class BitStream
     void push_short_str(std::string const & value);
 
     bool get_bool();
+    uint8_t get_uint8();
     char get_char();
     float get_float();
     double get_double();
@@ -38,12 +39,15 @@ class BitStream
     unsigned int get_16_int();
     unsigned int get_32_int();
     unsigned long long get_64_int();
+    unsigned long long get_int();
     std::string get_very_short_str();
     std::string get_short_str();
     std::string get_str();
 
     private:
 
-    unsigned int in_bit_pos_{0};
+    unsigned int write_in_bit_pos_{0};
+    unsigned int read_cursor_{0};
+    unsigned int read_in_bit_pos_{0};
     std::vector<uint8_t> stream_{0};
 };

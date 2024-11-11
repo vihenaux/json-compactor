@@ -1,10 +1,11 @@
 #include "bitstream.hpp"
+#include <iostream>
 
 void BitStream::push(bool value)
 {
-    if(in_bit_pos_ > 7)
+    if(write_in_bit_pos_ > 7)
     {
-        in_bit_pos_ = 1;
+        write_in_bit_pos_ = 1;
         uint8_t byte = value;
         byte <<= 7;
         stream_.push_back(byte);
@@ -12,9 +13,9 @@ void BitStream::push(bool value)
     }
 
     uint8_t byte = value;
-    byte <<= (7-in_bit_pos_);
+    byte <<= (7-write_in_bit_pos_);
     stream_.back() += byte;
-    ++in_bit_pos_;
+    ++write_in_bit_pos_;
 }
 
 void BitStream::push(char value)
@@ -24,7 +25,7 @@ void BitStream::push(char value)
 
 void BitStream::push(uint8_t value)
 {
-    switch(in_bit_pos_)
+    switch(write_in_bit_pos_)
     {
         case 7:
             stream_.push_back(value);
@@ -33,8 +34,8 @@ void BitStream::push(uint8_t value)
             stream_.back() = value;
             break;
         default:
-            uint8_t next_byte = value << (8-in_bit_pos_);
-            stream_.back() += value >> in_bit_pos_;
+            uint8_t next_byte = value << (8-write_in_bit_pos_);
+            stream_.back() += value >> write_in_bit_pos_;
             stream_.push_back(next_byte);
             break;
     }
@@ -156,15 +157,150 @@ void BitStream::push_short_str(std::string const & value)
 }
 
 bool BitStream::get_bool()
+{
+    if(read_in_bit_pos_ > 7)
+    {
+        read_in_bit_pos_ = 0;
+        ++read_cursor_;
+    }
+    if(read_cursor_ >= stream_.size())
+    {
+        std::cerr << "BitStream error : Data expected but not found" << std::endl;
+    }
+
+    bool bit = static_cast<bool>((stream_[read_cursor_] >> (7-read_in_bit_pos_))%2);
+    ++read_in_bit_pos_;
+
+    return bit;
+}
+
+uint8_t BitStream::get_uint8()
+{
+    if(read_in_bit_pos_ > 7)
+    {
+        read_in_bit_pos_ = 0;
+        ++read_cursor_;
+    }
+    if(read_cursor_ >= stream_.size() || (read_in_bit_pos_ != 0 && read_cursor_+1 >= stream_.size()))
+    {
+        std::cerr << "BitStream error : Data expected but not found" << std::endl;
+    }
+    if(read_in_bit_pos_ == 0)
+    {
+        uint8_t byte = stream_[read_cursor_];
+        ++read_cursor_;
+        return byte;
+    }
+
+    uint8_t byte = (stream_[read_cursor_] >> read_in_bit_pos_) << read_in_bit_pos_;
+    ++read_cursor_;
+    byte += stream_[read_cursor_] >> (7-read_in_bit_pos_);
+    return byte;
+}
+
 char BitStream::get_char()
+{
+    return static_cast<char>(get_uint8());
+}
+
 float BitStream::get_float()
+{
+    uint32_t value = get_32_int();
+    return *(reinterpret_cast<float*>(&value));
+}
+
 double BitStream::get_double()
+{
+    uint64_t value = get_64_int();
+    return *(reinterpret_cast<double*>(&value));
+}
+
 unsigned int BitStream::get_2_int()
+{
+    return (static_cast<unsigned int>(get_bool()) << 1) + static_cast<unsigned int>(get_bool());
+}
+
 unsigned int BitStream::get_4_int()
+{
+    unsigned int x = static_cast<unsigned int>(get_bool()) << 3;
+    x += static_cast<unsigned int>(get_bool()) << 2;
+    x += static_cast<unsigned int>(get_bool()) << 1;
+    x += static_cast<unsigned int>(get_bool());
+
+    return x;
+}
+
 unsigned int BitStream::get_8_int()
+{
+    return static_cast<unsigned int>(get_uint8());
+}
+
 unsigned int BitStream::get_16_int()
+{
+    return (get_8_int() << 8) + get_8_int();
+}
+
 unsigned int BitStream::get_32_int()
+{
+    return (get_16_int() << 16) + get_16_int();
+}
+
 unsigned long long BitStream::get_64_int()
+{
+    return (static_cast<unsigned long long>(get_32_int()) << 32) + get_32_int();
+}
+
+unsigned long long BitStream::get_int()
+{
+    unsigned int int_type = get_2_int();
+    switch(int_type)
+    {
+        case 0:
+            return static_cast<unsigned long long>(get_8_int());
+        case 1:
+            return static_cast<unsigned long long>(get_16_int());
+        case 2:
+            return static_cast<unsigned long long>(get_32_int());
+        default:
+            return static_cast<unsigned long long>(get_64_int());
+    }
+}
+
 std::string BitStream::get_very_short_str()
+{
+    unsigned int size = get_4_int();
+    std::string str;
+
+    for(unsigned int i(0); i < size; ++i)
+    {
+        str.push_back(get_char());
+    }
+
+    return str;
+}
+
 std::string BitStream::get_short_str()
+{
+    unsigned int size = get_8_int();
+    std::string str;
+
+    for(unsigned int i(0); i < size; ++i)
+    {
+        str.push_back(get_char());
+    }
+
+    return str;
+}
+
 std::string BitStream::get_str()
+{
+    unsigned long long size = get_int();
+    std::string str;
+
+    for(unsigned long long i(0); i < size; ++i)
+    {
+        str.push_back(get_char());
+    }
+
+    return str;
+}
