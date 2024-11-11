@@ -32,8 +32,8 @@
  * 0 : null
  * 1 00 8bits  : 1 Byte long storage
  * 1 01 16bits : 2 Byte long storage
- * 1 10 16bits : 4 Byte long storage
- * 1 11 16bits : 8 Byte long storage
+ * 1 10 32bits : 4 Byte long storage
+ * 1 11 64bits : 8 Byte long storage
  *
  * Float (Single precision) :
  * 0 : null
