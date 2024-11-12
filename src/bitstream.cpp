@@ -86,14 +86,8 @@ void BitStream::push(unsigned long long value)
         return;
     }
     push_2_int(3);
-    push(static_cast<uint8_t>(value >> 56));
-    push(static_cast<uint8_t>(value >> 48));
-    push(static_cast<uint8_t>(value >> 40));
-    push(static_cast<uint8_t>(value >> 32));
-    push(static_cast<uint8_t>(value >> 24));
-    push(static_cast<uint8_t>(value >> 16));
-    push(static_cast<uint8_t>(value >> 8));
-    push(static_cast<uint8_t>(value));
+    push_32_int(static_cast<unsigned int>(value >> 32));
+    push_32_int(static_cast<unsigned int>(value));
 }
 
 void BitStream::push(std::string const & value)
