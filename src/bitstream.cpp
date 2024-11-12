@@ -34,7 +34,7 @@ void BitStream::push(uint8_t value)
             stream_.back() = value;
             break;
         default:
-            uint8_t next_byte = value << (8-write_in_bit_pos_);
+            uint8_t next_byte = static_cast<uint8_t>(value << (8-write_in_bit_pos_));
             stream_.back() += value >> write_in_bit_pos_;
             stream_.push_back(next_byte);
             break;
@@ -140,7 +140,7 @@ void BitStream::push_32_int(unsigned int value)
 
 void BitStream::push_very_short_str(std::string const & value)
 {
-    push_4_int(value.size());
+    push_4_int(static_cast<unsigned int>(value.size()));
     for(unsigned int i(0); i < value.size()%16; ++i)
     {
         push(value[i]);
@@ -149,7 +149,7 @@ void BitStream::push_very_short_str(std::string const & value)
 
 void BitStream::push_short_str(std::string const & value)
 {
-    push_8_int(value.size());
+    push_8_int(static_cast<unsigned int>(value.size()));
     for(unsigned int i(0); i < value.size()%256; ++i)
     {
         push(value[i]);
@@ -192,7 +192,7 @@ uint8_t BitStream::get_uint8()
         return byte;
     }
 
-    uint8_t byte = (stream_[read_cursor_] >> read_in_bit_pos_) << read_in_bit_pos_;
+    uint8_t byte = static_cast<uint8_t>((stream_[read_cursor_] >> read_in_bit_pos_) << read_in_bit_pos_);
     ++read_cursor_;
     byte += stream_[read_cursor_] >> (7-read_in_bit_pos_);
     return byte;
