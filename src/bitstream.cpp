@@ -6,15 +6,11 @@ void BitStream::push(bool value)
     if(write_in_bit_pos_ > 7)
     {
         write_in_bit_pos_ = 1;
-        uint8_t byte = value;
-        byte <<= 7;
-        stream_.push_back(byte);
+        stream_.push_back(static_cast<uint8_t>(value << 7));
         return;
     }
 
-    uint8_t byte = value;
-    byte <<= (7-write_in_bit_pos_);
-    stream_.back() += byte;
+    stream_.back() += value << (7-write_in_bit_pos_);
     ++write_in_bit_pos_;
 }
 
@@ -27,11 +23,12 @@ void BitStream::push(uint8_t value)
 {
     switch(write_in_bit_pos_)
     {
-        case 7:
+        case 8:
             stream_.push_back(value);
             break;
         case 0:
             stream_.back() = value;
+            write_in_bit_pos_ = 7;
             break;
         default:
             uint8_t next_byte = static_cast<uint8_t>(value << (8-write_in_bit_pos_));
@@ -70,7 +67,7 @@ void BitStream::push(unsigned long long value)
     if(value < 256)
     {
         push_2_int(0);
-        push(static_cast<uint8_t>(value));
+        push_8_int(static_cast<unsigned int>(value));
         return;
     }
     if(value < 65536)
@@ -186,9 +183,9 @@ uint8_t BitStream::get_uint8()
         return byte;
     }
 
-    uint8_t byte = static_cast<uint8_t>((stream_[read_cursor_] >> read_in_bit_pos_) << read_in_bit_pos_);
+    uint8_t byte = static_cast<uint8_t>(stream_[read_cursor_] << read_in_bit_pos_);
     ++read_cursor_;
-    byte += stream_[read_cursor_] >> (7-read_in_bit_pos_);
+    byte += stream_[read_cursor_] >> (8-read_in_bit_pos_);
     return byte;
 }
 
