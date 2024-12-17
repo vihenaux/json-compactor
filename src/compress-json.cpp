@@ -92,7 +92,7 @@ void compress(std::string & const json_file_path, std::string & const output_pat
     output.close();
 }
 
-std::string compress(std::string & const json_content)
+BitStream compress(std::string & const json_content)
 {
     any_type::Any json = any_type::readJsonStr(json_content);
 
@@ -105,7 +105,143 @@ std::string compress(std::string & const json_content)
     return compress_root_node(json);
 }
 
-std::string compress_root_node(any_type::Any & root_node)
-{
 
+/*{{{ FUNCTION compress_object }}}*/
+    // /*{{{ IF /*{{{ VALUE compress_param_type }}}*/ == object }}}*/
+    if(node.contains("/*{{{ VALUE compress_param_name}}}*/"))
+    {
+        bitStream.push(true);
+        compress_/*{{{ VALUE compress_param_name }}}*/(node[/*{{{ VALUE compress_param_name }}}*/], bitStream);
+    }
+    else
+    {
+        bitStream.push(false);
+    }
+    /*{{{ END }}}*/
+/*{{{ END }}}*/
+
+/*{{{ FUNCTION compress_integer }}}*/
+    // /*{{{ IF /*{{{ VALUE compress_param_type }}}*/ == integer }}}*/
+    if(root_node.contains("/*{{{ VALUE compress_param_name}}}*/"))
+    {
+        bitStream.push(true);
+        bitStream.push(static_cast<unsigned int>(node[/*{{{ VALUE compress_param_name }}}*/].getInt()));
+    }
+    else
+    {
+        bitStream.push(false);
+    }
+    /*{{{ END }}}*/
+/*{{{ END }}}*/
+
+/*{{{ FUNCTION compress_string }}}*/
+    // /*{{{ IF /*{{{ VALUE compress_param_type }}}*/ == string }}}*/
+    if(root_node.contains("/*{{{ VALUE compress_param_name}}}*/"))
+    {
+        bitStream.push(true);
+        bitStream.push(node[/*{{{ VALUE compress_param_name }}}*/].getStr());
+    }
+    else
+    {
+        bitStream.push(false);
+    }
+    /*{{{ END }}}*/
+/*{{{ END }}}*/
+
+/*{{{ FUNCTION compress_boolean }}}*/
+    // /*{{{ IF /*{{{ VALUE compress_param_type }}}*/ == boolean}}}*/
+    if(root_node.contains("/*{{{ VALUE compress_param_name}}}*/"))
+    {
+        bitStream.push(true);
+        bitStream.push(node[/*{{{ VALUE compress_param_name }}}*/].getBool());
+    }
+    else
+    {
+        bitStream.push(false);
+    }
+    /*{{{ END }}}*/
+/*{{{ END }}}*/
+
+/*{{{ FUNCTION compress_float }}}*/
+    // /*{{{ IF /*{{{ VALUE compress_param_type }}}*/ == float}}}*/
+    if(root_node.contains("/*{{{ VALUE compress_param_name}}}*/"))
+    {
+        bitStream.push(true);
+        bitStream.push(static_cast<float>(node[/*{{{ VALUE compress_param_name }}}*/].getFlt()));
+    }
+    else
+    {
+        bitStream.push(false);
+    }
+    /*{{{ END }}}*/
+/*{{{ END }}}*/
+
+/*{{{ FUNCTION compress_double }}}*/
+    // /*{{{ IF /*{{{ VALUE compress_param_type }}}*/ == double }}}*/
+    if(root_node.contains("/*{{{ VALUE compress_param_name}}}*/"))
+    {
+        bitStream.push(true);
+        bitStream.push(node[/*{{{ VALUE compress_param_name }}}*/].getFlt());
+    }
+    else
+    {
+        bitStream.push(false);
+    }
+    /*{{{ END }}}*/
+/*{{{ END }}}*/
+
+void compress_root_node(any_type::Any & node, BitStream & bitStream)
+{
+    // /*{{{ IF /*{{{ VALUE type}}}*/ == object }}}*/
+    if(node.size() == 0)
+    {
+        bitStream.push(false);
+        return;
+    }
+    bitStream.push(true);
+    /*{{{ FOREACH property_name properties }}}*/
+
+    // /*{{{ LET compress_param_type properties /*{{{ VALUE property_name }}}*/ type }}}*/
+    // /*{{{ LET compress_param_name property_name }}} }}}*/
+    /*{{{ CALL compress_object }}}*/
+    /*{{{ CALL compress_integer }}}*/
+    /*{{{ CALL compress_string }}}*/
+    /*{{{ CALL compress_boolean }}}*/
+    /*{{{ CALL compress_float }}}*/
+    /*{{{ CALL compress_double }}}*/
+
+    // /*{{{ IF /*{{{ VALUE properties /*{{{ VALUE property_name }}}*/ type }}}*/ == array }}}*/
+    if(node.contains("/*{{{ VALUE property_name}}}*/"))
+    {
+        bitStream.push(true);
+        bitStream.push(node[/*{{{ VALUE property_name }}}*/].size());
+        for(unsigned int i(0); i < bitStream.push(node[/*{{{ VALUE property_name }}}*/].size()); ++i)
+        {
+            // /*{{{ IF /*{{{ VALUE properties /*{{{ VALUE property_name }}}*/ items type }}}*/ == object }}}*/
+            compress_/*{{{ VALUE property_name }}}*/_item(node[/*{{{ VALUE property_name }}}*/][i], bitStream);
+            /*{{{ END }}}*/
+            // /*{{{ IF /*{{{ VALUE properties /*{{{ VALUE property_name }}}*/ items type }}}*/ == integer }}}*/
+            bitStream.push(static_cast<unsigned int>(node[/*{{{ VALUE property_name }}}*/][i].getInt()));
+            /*{{{ END }}}*/
+            // /*{{{ IF /*{{{ VALUE properties /*{{{ VALUE property_name }}}*/ items type }}}*/ == string }}}*/
+            bitStream.push(node[/*{{{ VALUE property_name }}}*/][i].getStr());
+            /*{{{ END }}}*/
+            // /*{{{ IF /*{{{ VALUE properties /*{{{ VALUE property_name }}}*/ items type }}}*/ == boolean }}}*/
+            bitStream.push(node[/*{{{ VALUE property_name }}}*/][i].getBool());
+            /*{{{ END }}}*/
+            // /*{{{ IF /*{{{ VALUE properties /*{{{ VALUE property_name }}}*/ items type }}}*/ == float }}}*/
+            bitStream.push(static_cast<float>(node[/*{{{ VALUE property_name }}}*/][i].getFlt()));
+            /*{{{ END }}}*/
+            // /*{{{ IF /*{{{ VALUE properties /*{{{ VALUE property_name }}}*/ items type }}}*/ == double }}}*/
+            bitStream.push(node[/*{{{ VALUE property_name }}}*/][i].getFlt());
+            /*{{{ END }}}*/
+        }
+    }
+    else
+    {
+        bitStream.push(false);
+    }
+    /*{{{ END }}}*/
+    /*{{{ END }}}*/
+    /*{{{ END }}}*/
 }
