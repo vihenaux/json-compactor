@@ -11,6 +11,7 @@
     },
     "object-test": {
       "type": "object",
+      "description": "A simple object to test nested data",
       "properties": {
         "test1": {
           "type": "integer"
@@ -25,6 +26,12 @@
             "properties": {
               "test3": {
                 "type": "integer"
+              },
+              "nested-simple-array" : {
+                "type": "array",
+                "items": {
+                  "type": "float"
+                }
               }
             }
           }
