@@ -5,7 +5,6 @@ import re
 
 def generate():
     os.makedirs("generated_src", exist_ok=True)
-    #generate_file.generate_file_from_lib("templates/template.test", "project_example.json", "output/out.test", "paste_key_here.txt")
     for current_dir, sub_dirs, files in os.walk("../"):
         if re.search("(.*/)?build(/.*)?", current_dir):
             continue

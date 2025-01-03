@@ -1,5 +1,37 @@
 #include "bitstream.hpp"
 #include <iostream>
+#include <fstream>
+#include <cassert>
+
+BitStream::BitStream(std::string const & path) : stream_()
+{
+    std::ifstream input_file(path);
+
+    if(!input_file.is_open())
+    {
+        std::cerr << "Cannot open file at : " << path << std::endl;
+        return;
+    }
+
+    char single_buffer;
+    for(unsigned int i(0); i < 4; ++i)
+    {
+        input_file.get(single_buffer);
+        push(single_buffer);
+    }
+
+    unsigned int file_size = get_32_int();
+    char *buffer = new char[file_size+1];
+
+    input_file.get(buffer, file_size);
+    assert(buffer[file_size] == '\0', "BitStream buffer not ending with null char.");
+    for(unsigned int i(0); i < file_size; ++i)
+    {
+        push(buffer[i]);
+    }
+
+    delete[] buffer;
+}
 
 void BitStream::push(bool value)
 {
@@ -294,4 +326,17 @@ std::string BitStream::get_str()
     }
 
     return str;
+}
+
+void BitStream::save(std::string const & path) const
+{
+    std::ofstream output_file(path);
+    BitStream tmp;
+    tmp.push_32_int(stream_.size());
+    output_file << tmp.get_char() << tmp.get_char() << tmp.get_char() << tmp.get_char();
+
+    for(unsigned int i(0); i < stream_.size(); ++i)
+    {
+        output_file << stream_[i];
+    }
 }

@@ -9,6 +9,7 @@ class BitStream
     public:
 
     BitStream() = default;
+    BitStream(std::string const & path);
     ~BitStream() = default;
 
     void push(bool value);
@@ -43,6 +44,8 @@ class BitStream
     std::string get_very_short_str();
     std::string get_short_str();
     std::string get_str();
+
+    void save(std::string const & path) const;
 
     private:
 
