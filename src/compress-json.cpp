@@ -64,7 +64,7 @@
  * 1 Int items : Int+1 = number of items
  */
 
-void compress(std::string & const json_file_path, std::string & const output_path)
+void compress(std::string const & json_file_path, std::string const & output_path)
 {
     // Json source file read and checks
     any_type::Any json = any_type::readJson(json_file_path);
@@ -92,7 +92,7 @@ void compress(std::string & const json_file_path, std::string & const output_pat
     output.close();
 }
 
-BitStream compress(std::string & const json_content)
+BitStream compress(std::string const & json_content)
 {
     any_type::Any json = any_type::readJsonStr(json_content);
 
@@ -125,7 +125,7 @@ BitStream compress(std::string & const json_content)
     if(node.contains("/*{{{ VALUE compress_param_name }}}*/"))
     {
         bitStream.push(true);
-        bitStream.push(static_cast<unsigned int>(node["/*{{{ VALUE compress_param_name }}}*/"].getInt()));
+        bitStream.push(static_cast<unsigned long long>(node["/*{{{ VALUE compress_param_name }}}*/"].getInt()));
     }
     else
     {
@@ -195,7 +195,7 @@ BitStream compress(std::string & const json_content)
     if(node.contains("/*{{{ VALUE compress_param_name}}}*/"))
     {
         bitStream.push(true);
-        bitStream.push(node["/*{{{ VALUE compress_param_name }}}*/"].size());
+        bitStream.push(static_cast<unsigned long long>(node["/*{{{ VALUE compress_param_name }}}*/"].size()));
         for(unsigned int i(0); i < node["/*{{{ VALUE compress_param_name }}}*/"].size(); ++i)
         {
             // /*{{{ IF /*{{{ VALUE compress_param_array_type }}}*/ == object }}}*/

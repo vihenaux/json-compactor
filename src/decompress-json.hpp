@@ -4,8 +4,8 @@
 #include "bitstream.hpp"
 #include "cpp-any-type/any.hpp"
 
-void decompress(std::string & const json_file_path, std::string & const output_path);
-any_type::Any decompress(BitStream & bitStream);
+void decompress(std::string const & compressed_file_path, std::string const & output_path);
+any_type::Any decompress(std::string const & compressed_file_path);
 
 any_type::Any decompress_root_node(BitStream & bitStream);
 
