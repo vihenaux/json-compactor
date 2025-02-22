@@ -1,10 +1,10 @@
 {
   "name": "TEST 1",
   "quantity": 125,
-  "object-test": {
+  "object_test": {
     "test1": 31,
     "test2": "Just a test",
-    "array-test": [
+    "array_test": [
       {
         "test3": 0
       },

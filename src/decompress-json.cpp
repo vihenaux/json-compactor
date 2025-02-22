@@ -1,10 +1,9 @@
 #include "decompress-json.hpp"
-#include <fstream>
-#include <iostream>
 
 void decompress(std::string const & compressed_file_path, std::string const & output_path)
 {
-    any_type::saveJson(decompress_root_node(compressed_file_path), output_path);
+    BitStream input(compressed_file_path);
+    any_type::saveJson(decompress_root_node(input), output_path);
 }
 
 any_type::Any decompress(std::string const & compressed_file_path)
@@ -16,7 +15,7 @@ any_type::Any decompress(std::string const & compressed_file_path)
 
 
 /*{{{ FUNCTION decompress_object }}}*/
-    // /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == object }}}*/
+// /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == object }}}*/
     if(bitStream.get_bool())
     {
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", decompress_/*{{{ VALUE decompress_param_name }}}*/(bitStream));
@@ -25,24 +24,24 @@ any_type::Any decompress(std::string const & compressed_file_path)
     {
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any());
     }
-    /*{{{ END }}}*/
+/*{{{ END }}}*/
 /*{{{ END }}}*/
 
 /*{{{ FUNCTION decompress_integer }}}*/
-    // /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == integer }}}*/
+// /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == integer }}}*/
     if(bitStream.get_bool())
     {
-        object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any(static_cast<int>bitStream.get_int()));
+        object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any(static_cast<int>(bitStream.get_int())));
     }
     else
     {
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any());
     }
-    /*{{{ END }}}*/
+/*{{{ END }}}*/
 /*{{{ END }}}*/
 
 /*{{{ FUNCTION decompress_string }}}*/
-    // /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == string }}}*/
+// /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == string }}}*/
     if(bitStream.get_bool())
     {
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any(bitStream.get_str()));
@@ -51,11 +50,11 @@ any_type::Any decompress(std::string const & compressed_file_path)
     {
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any());
     }
-    /*{{{ END }}}*/
+/*{{{ END }}}*/
 /*{{{ END }}}*/
 
 /*{{{ FUNCTION decompress_boolean }}}*/
-    // /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == boolean}}}*/
+// /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == boolean}}}*/
     if(bitStream.get_bool())
     {
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any(bitStream.get_bool()));
@@ -64,11 +63,11 @@ any_type::Any decompress(std::string const & compressed_file_path)
     {
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any());
     }
-    /*{{{ END }}}*/
+/*{{{ END }}}*/
 /*{{{ END }}}*/
 
 /*{{{ FUNCTION decompress_float }}}*/
-    // /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == float}}}*/
+// /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == float}}}*/
     if(bitStream.get_bool())
     {
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any(bitStream.get_float()));
@@ -77,11 +76,11 @@ any_type::Any decompress(std::string const & compressed_file_path)
     {
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any());
     }
-    /*{{{ END }}}*/
+/*{{{ END }}}*/
 /*{{{ END }}}*/
 
 /*{{{ FUNCTION decompress_double }}}*/
-    // /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == double }}}*/
+// /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == double }}}*/
     if(bitStream.get_bool())
     {
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any(bitStream.get_double()));
@@ -90,14 +89,14 @@ any_type::Any decompress(std::string const & compressed_file_path)
     {
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any());
     }
-    /*{{{ END }}}*/
+/*{{{ END }}}*/
 /*{{{ END }}}*/
 
 /*{{{ FUNCTION decompress_array }}}*/
-    // /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == array }}}*/
+// /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == array }}}*/
     if(bitStream.get_bool())
     {
-        any_type::Any array_items(std::vector<any_type::Any>());
+        any_type::Any array_items((std::vector<any_type::Any>()));
         unsigned long long array_size = bitStream.get_int();
         for(unsigned long long i(0); i < array_size; ++i)
         {
@@ -114,7 +113,7 @@ any_type::Any decompress(std::string const & compressed_file_path)
             array_items.add(bitStream.get_bool());
             /*{{{ END }}}*/
             // /*{{{ IF /*{{{ VALUE decompress_param_array_type }}}*/ == float }}}*/
-            array_items.add(bitStream.get_float());
+            array_items.add(static_cast<double>(bitStream.get_float()));
             /*{{{ END }}}*/
             // /*{{{ IF /*{{{ VALUE decompress_param_array_type }}}*/ == double }}}*/
             array_items.add(bitStream.get_double());
@@ -126,7 +125,7 @@ any_type::Any decompress(std::string const & compressed_file_path)
     {
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any());
     }
-    /*{{{ END }}}*/
+/*{{{ END }}}*/
 /*{{{ END }}}*/
 
 any_type::Any decompress_root_node(BitStream & bitStream)
@@ -163,18 +162,22 @@ any_type::Any decompress_/*{{{ VALUE object_name }}}*/(BitStream & bitStream)
 any_type::Any decompress_/*{{{ VALUE object_name }}}*/_item(BitStream & bitStream)
 /*{{{ END }}}*/
 {
-    /*{{{ FOREACH property_name object_to_decompress properties }}}*/
-    // /*{{{ LET decompress_param_type object_to_decompress properties /*{{{ VALUE property_name }}}*/ type }}}*/
-    // /*{{{ LET decompress_param_name property_name }}}*/
-    /*{{{ CALL decompress_object }}}*/
-    /*{{{ CALL decompress_integer }}}*/
-    /*{{{ CALL decompress_string }}}*/
-    /*{{{ CALL decompress_boolean }}}*/
-    /*{{{ CALL decompress_float }}}*/
-    /*{{{ CALL decompress_double }}}*/
-    // /*{{{ LET decompress_param_array_type object_to_decompress properties /*{{{ VALUE property_name }}}*/ items type }}}*/
-    /*{{{ CALL decompress_array }}}*/
-    /*{{{ END }}}*/
+    any_type::Any object_to_return((std::map<std::string,any_type::Any>()));
+
+/*{{{ FOREACH property_name object_to_decompress properties }}}*/
+// /*{{{ LET decompress_param_type object_to_decompress properties /*{{{ VALUE property_name }}}*/ type }}}*/
+// /*{{{ LET decompress_param_name property_name }}}*/
+/*{{{ CALL decompress_object }}}*/
+/*{{{ CALL decompress_integer }}}*/
+/*{{{ CALL decompress_string }}}*/
+/*{{{ CALL decompress_boolean }}}*/
+/*{{{ CALL decompress_float }}}*/
+/*{{{ CALL decompress_double }}}*/
+// /*{{{ LET decompress_param_array_type object_to_decompress properties /*{{{ VALUE property_name }}}*/ items type }}}*/
+/*{{{ CALL decompress_array }}}*/
+/*{{{ END }}}*/
+
+    return object_to_return;
 }
 
 /*{{{ END }}}*/

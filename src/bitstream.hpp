@@ -47,6 +47,8 @@ class BitStream
 
     void save(std::string const & path) const;
 
+    void debug() const;
+
     private:
 
     unsigned int write_in_bit_pos_{0};

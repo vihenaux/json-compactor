@@ -79,30 +79,25 @@ void compress(std::string const & json_file_path, std::string const & output_pat
         return;
     }
 
-    // Output file opening
-    std::ofstream output(output_path);
-    if(!output.is_open())
-    {
-        std::cerr << "Error : Cannot open output file at : " << output_path << std::endl;
-        return;
-    }
-
-    output << compress_root_node(json);
-
-    output.close();
+    BitStream compressed_stream;
+    compress_root_node(json, compressed_stream);
+    compressed_stream.save(output_path);
 }
 
 BitStream compress(std::string const & json_content)
 {
     any_type::Any json = any_type::readJsonStr(json_content);
 
+    BitStream compressed_stream;
+
     if(json.getStatus() == any_type::ANY_OBJECT_STATUS::KO)
     {
         std::cerr << "Error : unexpected json content" << std::endl;
-        return;
+        return compressed_stream;
     }
 
-    return compress_root_node(json);
+    compress_root_node(json, compressed_stream);
+    return compressed_stream;
 }
 
 
@@ -111,7 +106,8 @@ BitStream compress(std::string const & json_content)
     if(node.contains("/*{{{ VALUE compress_param_name }}}*/"))
     {
         bitStream.push(true);
-        compress_/*{{{ VALUE compress_param_name }}}*/(node["/*{{{ VALUE compress_param_name }}}*/"], bitStream);
+        any_type::Any object_to_compress = node["/*{{{ VALUE compress_param_name }}}*/"];
+        compress_/*{{{ VALUE compress_param_name }}}*/(object_to_compress, bitStream);
     }
     else
     {
@@ -199,7 +195,8 @@ BitStream compress(std::string const & json_content)
         for(unsigned int i(0); i < node["/*{{{ VALUE compress_param_name }}}*/"].size(); ++i)
         {
             // /*{{{ IF /*{{{ VALUE compress_param_array_type }}}*/ == object }}}*/
-            compress_/*{{{ VALUE property_name }}}*/_item(node["/*{{{ VALUE property_name }}}*/"][i], bitStream);
+            any_type::Any item_to_compress = node["/*{{{ VALUE property_name }}}*/"][i];
+            compress_/*{{{ VALUE property_name }}}*/_item(item_to_compress, bitStream);
             /*{{{ END }}}*/
             // /*{{{ IF /*{{{ VALUE compress_param_array_type }}}*/ == integer }}}*/
             bitStream.push(static_cast<unsigned int>(node["/*{{{ VALUE property_name }}}*/"][i].getInt()));

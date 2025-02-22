@@ -9,7 +9,7 @@
     "quantity": {
       "type": "integer"
     },
-    "object-test": {
+    "object_test": {
       "type": "object",
       "description": "A simple object to test nested data",
       "properties": {
@@ -19,7 +19,7 @@
         "test2": {
           "type": "string"
         },
-        "array-test": {
+        "array_test": {
           "type": "array",
           "items": {
             "type": "object",
@@ -27,7 +27,7 @@
               "test3": {
                 "type": "integer"
               },
-              "nested-simple-array" : {
+              "nested_simple_array" : {
                 "type": "array",
                 "items": {
                   "type": "float"
