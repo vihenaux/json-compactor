@@ -1,12 +1,19 @@
 {
   "name": "TEST 1",
   "quantity": 125,
+  "factor": 0.1,
   "object_test": {
     "test1": 31,
     "test2": "Just a test",
     "array_test": [
       {
-        "test3": 0
+        "test3": 0,
+        "nested_simple_array": [
+          0.1,
+          0.2,
+          2459.54,
+          2.002
+        ]
       },
       {
         "test3": 5

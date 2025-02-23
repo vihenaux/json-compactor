@@ -9,6 +9,9 @@
     "quantity": {
       "type": "integer"
     },
+    "factor": {
+      "type": "float"
+    },
     "object_test": {
       "type": "object",
       "description": "A simple object to test nested data",

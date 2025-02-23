@@ -70,7 +70,7 @@ any_type::Any decompress(std::string const & compressed_file_path)
 // /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == float}}}*/
     if(bitStream.get_bool())
     {
-        object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any(bitStream.get_float()));
+        object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any(static_cast<double>(bitStream.get_float())));
     }
     else
     {
