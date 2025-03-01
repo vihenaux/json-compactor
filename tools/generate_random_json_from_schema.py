@@ -1,12 +1,12 @@
 import json
 import random
 import string
+import sys
 
 def generate_random_string(length=10):
     return ''.join(random.choices(string.ascii_letters + string.digits, k=length))
 
 def generate_random_data(schema):
-    """Recursively generate random data based on the JSON schema."""
     data = {}
 
     for key, value in schema.get('properties', {}).items():
@@ -54,10 +54,10 @@ def generate_random_json_from_schema(schema_path, output_path):
     random_data = generate_random_data(schema)
     write_json_to_file(random_data, output_path)
 
-def main():
-    schema_path = input("Enter the path to the JSON schema: ")
-    output_path = input("Enter the path to save the generated JSON file: ")
-    generate_random_json_from_schema(schema_path, output_path)
-
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) != 3:
+        schema_path = input("Enter the path to the JSON schema: ")
+        output_path = input("Enter the path to save the generated JSON file: ")
+        generate_random_json_from_schema(schema_path, output_path)
+    else:
+        generate_random_json_from_schema(sys.argv[1],sys.argv[2])
