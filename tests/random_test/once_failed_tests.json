@@ -1,0 +1,19 @@
+{
+    "once_failed_tests_array": [
+        {
+            "schema": "random_files/schema_Hc6gM5JJzhZ7CA8xKLJ8.json",
+            "test_files": [
+                "random_files/RV2TSlr6ei7l87HgXXbR.json",
+                "random_files/O3RVsO2YtDoGKLYm65ak.json",
+                "random_files/BtWbxNgV2KpMoYS9GD2I.json",
+                "random_files/9Q7DGhoVEmvtB87oHLQX.json",
+                "random_files/F583unITCnLPxqJ1gn6W.json",
+                "random_files/mP4m6zjxduKwEVuaVQx8.json",
+                "random_files/jERpOqcUZjzHDkYJEFE7.json",
+                "random_files/oviZr1TgS0ptp47DdKdY.json",
+                "random_files/LDmUMdzdxoZeWjOFtjR7.json",
+                "random_files/PKGl0ln9dMYHbc2EUStA.json"
+            ]
+        }
+    ]
+}

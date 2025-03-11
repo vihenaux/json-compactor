@@ -9,7 +9,7 @@ def compare_json(file1, file2):
     except (json.JSONDecodeError, FileNotFoundError) as e:
         print(f"Error reading the files: {e}")
         return False
-    return data1, data2
+    return data1 == data2
 
 if __name__ == "__main__":
     if len(sys.argv) != 3:
