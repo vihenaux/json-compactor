@@ -83,6 +83,7 @@ def main():
     tests_succeeded = True
     for test in tests["once_failed_tests_array"]:
         if False in complete_test(test["schema"], test["test_files"]):
+            print("Test on schema : ", test["schema"], " failed")
             tests_succeeded = False
 
     if not tests_succeeded:

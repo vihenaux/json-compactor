@@ -21,18 +21,10 @@ BitStream::BitStream(std::string const & path)
     }
 
     unsigned int file_size = get_32_int();
-    char *buffer = new char[file_size+1];
+    char *buffer = new char[file_size];
 
-    input_file.get(buffer, file_size+1);
-/*
-    std::cout << "READ (" << file_size+1 << ") : " << std::endl;
-    for(unsigned int i(0); i < file_size+1; ++i)
-    {
-        std::cout << static_cast<unsigned int>(buffer[i]) << " ";
-    }
-    std::cout << std::endl;
-*/
-    assert(buffer[file_size] == '\0'); // BitStream buffer not ending with null char.
+    input_file.read(buffer, file_size);
+
     for(unsigned int i(0); i < file_size; ++i)
     {
         push(buffer[i]);
