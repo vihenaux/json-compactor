@@ -1,0 +1,74 @@
+{
+    "type": "object",
+    "properties": {
+        "Y0DcZaq": {
+            "type": "array",
+            "items": {
+                "type": "boolean"
+            }
+        },
+        "Eaew64G": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "MDjIy": {
+                        "type": "double"
+                    },
+                    "AwD9k": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "DlZPf": {
+                        "type": "boolean"
+                    },
+                    "0X6hrma1": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "Ke7oQW": {
+            "type": "object",
+            "properties": {
+                "jmtUfoUh": {
+                    "type": "array",
+                    "items": {
+                        "type": "boolean"
+                    }
+                },
+                "A7Aff": {
+                    "type": "boolean"
+                },
+                "RcAzk": {
+                    "type": "object",
+                    "properties": {
+                        "H6HNhECk": {
+                            "type": "integer"
+                        },
+                        "TOtUS": {
+                            "type": "integer"
+                        },
+                        "jwID0": {
+                            "type": "boolean"
+                        },
+                        "02y63Yr": {
+                            "type": "array",
+                            "items": {
+                                "type": "integer"
+                            }
+                        }
+                    }
+                },
+                "svWFh": {
+                    "type": "string"
+                },
+                "u1zUBNET": {
+                    "type": "boolean"
+                }
+            }
+        }
+    }
+}

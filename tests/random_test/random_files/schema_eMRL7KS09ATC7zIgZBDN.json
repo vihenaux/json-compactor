@@ -1,0 +1,23 @@
+{
+    "type": "object",
+    "properties": {
+        "TP3MlBo": {
+            "type": "string"
+        },
+        "5ws3Tcc2": {
+            "type": "string"
+        },
+        "EJLok": {
+            "type": "string"
+        },
+        "zK8PlG": {
+            "type": "float"
+        },
+        "2Ubg5": {
+            "type": "array",
+            "items": {
+                "type": "float"
+            }
+        }
+    }
+}

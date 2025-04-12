@@ -1,0 +1,17 @@
+{
+    "type": "object",
+    "properties": {
+        "8iIUqC": {
+            "type": "float"
+        },
+        "1lxtgNY": {
+            "type": "integer"
+        },
+        "bxgPCJGU": {
+            "type": "boolean"
+        },
+        "x9nLLn": {
+            "type": "double"
+        }
+    }
+}

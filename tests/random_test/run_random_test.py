@@ -52,7 +52,8 @@ def complete_test(schema_file_path, json_path_array):
             os.system("./random_test " + json_path)
             result.append(compare_json.compare_json(json_path, "decompressed_file.json"))
         return result
-    except Exception:
+    except Exception as e:
+        print(e)
         return [False for _ in range(len(json_path_array))]
 
 
@@ -82,8 +83,11 @@ def main():
 
     tests_succeeded = True
     for test in tests["once_failed_tests_array"]:
-        if False in complete_test(test["schema"], test["test_files"]):
+        result = complete_test(test["schema"], test["test_files"])
+        if False in result:
             print("Test on schema : ", test["schema"], " failed")
+            for x in range(len(test["test_files"])):
+                print(test["test_files"][x], " : ", result[x])
             tests_succeeded = False
 
     if not tests_succeeded:

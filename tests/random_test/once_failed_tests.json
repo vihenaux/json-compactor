@@ -14,6 +14,50 @@
                 "random_files/LDmUMdzdxoZeWjOFtjR7.json",
                 "random_files/PKGl0ln9dMYHbc2EUStA.json"
             ]
+        },
+        {
+            "schema": "random_files/schema_eMRL7KS09ATC7zIgZBDN.json",
+            "test_files": [
+                "random_files/tuXyeArZCLimXjMbW7kT.json",
+                "random_files/gEXxluHgxPfglakV1uhf.json",
+                "random_files/42T04TbSSQoCbXFzcaQM.json",
+                "random_files/371FhiTUpMMjFVK0Hafz.json",
+                "random_files/xA6z5hvrj5QcJsS9NmD7.json",
+                "random_files/8ndz9NMi9sELOxj7OJPr.json",
+                "random_files/REgiIHzXbQ65uwdWiutL.json",
+                "random_files/7PWxHOD1OLquuriSMTfq.json",
+                "random_files/zutLeQjM3YCuXtgEIkRi.json"
+            ]
+        },
+        {
+            "schema": "random_files/schema_ItrXURq3wuakcM7oyPcN.json",
+            "test_files": [
+                "random_files/JIgPJAIGSD5I7AlxCQDs.json",
+                "random_files/6q8pEk6uuUJgeeFtSGmK.json",
+                "random_files/a0vdtYeg26MWhdBOICG8.json",
+                "random_files/vt4c7PdkywLlpLRXFAW7.json",
+                "random_files/JZ9nwwiYXevCz17gKgyi.json",
+                "random_files/3xApOG81WPmgsGdo2kz5.json",
+                "random_files/hnlKH3H9XT4wKsizLcGt.json",
+                "random_files/ZGsyJqBJOUq9zTxflR3d.json",
+                "random_files/I0LY8qnUfeNXTSrVGL6S.json",
+                "random_files/KEvg2Ijrptt65EAp54Nq.json"
+            ]
+        },
+        {
+            "schema": "random_files/schema_JmnJprFWiJ1GWcJPFgnp.json",
+            "test_files": [
+                "random_files/OafK1ANLAUjRVj2aNjLP.json",
+                "random_files/Qs98rXVnrGS6oaHjkiQy.json",
+                "random_files/msbt1JTX8w2VDe3YndXk.json",
+                "random_files/GMnOvBm6g3Vp5l6g1Gv8.json",
+                "random_files/6LhBZeF3uOkyR4fwb1jP.json",
+                "random_files/nGyU5bXw3IuF8ZWuaH7T.json",
+                "random_files/rJvMX6Vzog0zZW9mKIEa.json",
+                "random_files/9WJ2btCRDuuMdCQdxQSg.json",
+                "random_files/rRr6XWvN0I1IUnonldGD.json",
+                "random_files/ZtxLeEfnv8kkdwUBxVHb.json"
+            ]
         }
     ]
 }

@@ -199,7 +199,7 @@ BitStream compress(std::string const & json_content)
             compress_/*{{{ VALUE property_name }}}*/_item(item_to_compress, bitStream);
             /*{{{ END }}}*/
             // /*{{{ IF /*{{{ VALUE compress_param_array_type }}}*/ == integer }}}*/
-            bitStream.push(static_cast<unsigned int>(node["/*{{{ VALUE property_name }}}*/"][i].getInt()));
+            bitStream.push(static_cast<unsigned long long>(node["/*{{{ VALUE property_name }}}*/"][i].getInt()));
             /*{{{ END }}}*/
             // /*{{{ IF /*{{{ VALUE compress_param_array_type }}}*/ == string }}}*/
             bitStream.push(node["/*{{{ VALUE property_name }}}*/"][i].getStr());
