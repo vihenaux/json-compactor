@@ -77,7 +77,7 @@ def delete_test(test_to_delete):
         os.remove(json_path)
 
 
-def main():
+def main(nb_test_to_run):
     with open('once_failed_tests.json') as tests_file:
         tests = json.load(tests_file)
 
@@ -93,7 +93,7 @@ def main():
     if not tests_succeeded:
         return
 
-    for _ in range(100):
+    for _ in range(nb_test_to_run):
         test = create_new_test()
 
         test_result = complete_test(test["schema"], test["test_files"])
@@ -119,4 +119,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    nb_test_to_run = 10
+    if len(sys.argv) == 2:
+        nb_test_to_run = int(sys.argv[1])
+
+    main(nb_test_to_run)
