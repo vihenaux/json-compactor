@@ -124,6 +124,68 @@ def main(nb_test_to_run):
                 "nb_compression_test": 0
             })
 
+    if compression_history["stats"][-1]["min_compression_rate"] == 1:
+        compression_rate_sum = 0
+        nb_tests = 0
+        for commit_history in compression_history["stats"][:-1]:
+            test_result = complete_test(commit_history["min_compression_schema"], [commit_history["min_compression_file"]])
+
+            if test_result[0] < compression_history["stats"][-1]["min_compression_rate"]:
+                original_schema = compression_history["stats"][-1]["min_compression_schema"]
+                original_file = compression_history["stats"][-1]["min_compression_file"]
+
+                compression_history["stats"][-1]["min_compression_rate"] = test_result[0]
+                compression_history["stats"][-1]["min_compression_schema"] = commit_history["min_compression_schema"]
+                compression_history["stats"][-1]["min_compression_file"] = commit_history["min_compression_file"]
+
+                if original_schema != "":
+                    try_removing_schema(original_schema, compression_history)
+                    try_removing_file(original_file, compression_history)
+            if test_result[0] > compression_history["stats"][-1]["max_compression_rate"]:
+                original_schema = compression_history["stats"][-1]["max_compression_schema"]
+                original_file = compression_history["stats"][-1]["max_compression_file"]
+
+                compression_history["stats"][-1]["max_compression_rate"]= test_result[0]
+                compression_history["stats"][-1]["max_compression_schema"]= commit_history["min_compression_schema"]
+                compression_history["stats"][-1]["max_compression_file"]= commit_history["min_compression_file"]
+
+                if original_schema != "":
+                    try_removing_schema(original_schema, compression_history)
+                    try_removing_file(original_file, compression_history)
+
+
+            test_result = complete_test(commit_history["max_compression_schema"], [commit_history["max_compression_file"]])
+
+            if test_result[0] < compression_history["stats"][-1]["min_compression_rate"]:
+                original_schema = compression_history["stats"][-1]["min_compression_schema"]
+                original_file = compression_history["stats"][-1]["min_compression_file"]
+
+                compression_history["stats"][-1]["min_compression_rate"] = test_result[0]
+                compression_history["stats"][-1]["min_compression_schema"] = commit_history["min_compression_schema"]
+                compression_history["stats"][-1]["min_compression_file"] = commit_history["min_compression_file"]
+
+                if original_schema != "":
+                    try_removing_schema(original_schema, compression_history)
+                    try_removing_file(original_file, compression_history)
+            if test_result[0] > compression_history["stats"][-1]["max_compression_rate"]:
+                original_schema = compression_history["stats"][-1]["max_compression_schema"]
+                original_file = compression_history["stats"][-1]["max_compression_file"]
+
+                compression_history["stats"][-1]["max_compression_rate"]= test_result[0]
+                compression_history["stats"][-1]["max_compression_schema"]= commit_history["min_compression_schema"]
+                compression_history["stats"][-1]["max_compression_file"]= commit_history["min_compression_file"]
+
+                if original_schema != "":
+                    try_removing_schema(original_schema, compression_history)
+                    try_removing_file(original_file, compression_history)
+
+            compression_rate_sum += test_result[0]
+            nb_tests += 2
+
+        compression_history["stats"][-1]["avg_compression_rate"] = compression_rate_sum / nb_tests
+        compression_history["stats"][-1]["nb_compression_test"] = nb_tests
+
+
     for _ in range(nb_test_to_run):
         test = create_new_test()
 

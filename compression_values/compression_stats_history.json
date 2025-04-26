@@ -10,6 +10,17 @@
             "max_compression_file": "random_files/zUuzbatvXtTKTZR2UKTm.json",
             "avg_compression_rate": 0.7917800355488869,
             "nb_compression_test": 1000
+        },
+        {
+            "commit_hash": "4bfd63c0591da68063e06b033b95b21f1ff74694",
+            "min_compression_rate": 0.42666666666666664,
+            "min_compression_schema": "random_files/schema_kfsNT4GzzLAW5rPUfBbQ.json",
+            "min_compression_file": "random_files/ZdPeeD4brRL2WbAkgXOY.json",
+            "max_compression_rate": 0.9556962025316456,
+            "max_compression_schema": "random_files/schema_kfsNT4GzzLAW5rPUfBbQ.json",
+            "max_compression_file": "random_files/ZdPeeD4brRL2WbAkgXOY.json",
+            "avg_compression_rate": 0.7884436067726566,
+            "nb_compression_test": 502
         }
     ]
 }
