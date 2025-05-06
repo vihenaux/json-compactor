@@ -21,6 +21,23 @@
             "max_compression_file": "random_files/ZdPeeD4brRL2WbAkgXOY.json",
             "avg_compression_rate": 0.7884436067726566,
             "nb_compression_test": 502
+        },
+        {
+            "commit_hash": "0e52ec7cb3e76fbed135a41e1acd73a9f3ff93fc",
+            "min_compression_rate": 0.42666666666666664,
+            "min_compression_schema": "random_files/schema_kfsNT4GzzLAW5rPUfBbQ.json",
+            "min_compression_file": "random_files/ZdPeeD4brRL2WbAkgXOY.json",
+            "max_compression_rate": 0.9556962025316456,
+            "max_compression_schema": "random_files/schema_kfsNT4GzzLAW5rPUfBbQ.json",
+            "max_compression_file": "random_files/ZdPeeD4brRL2WbAkgXOY.json",
+            "avg_compression_rate": 0.7793477423389736,
+            "nb_compression_test": 1004,
+            "max_compression_time": 6960,
+            "min_compression_time": 90,
+            "avg_compression_time": 151.52490039840637,
+            "max_decompression_time": 6742,
+            "min_decompression_time": 97,
+            "avg_decompression_time": 192.96513944223108
         }
     ]
 }
