@@ -163,7 +163,8 @@ BitStream compress(std::string const & json_content)
     if(node.contains("/*{{{ VALUE compress_param_name }}}*/"))
     {
         bitStream.push(true);
-        bitStream.push(static_cast<float>(node["/*{{{ VALUE compress_param_name }}}*/"].getFlt()));
+        //bitStream.push(static_cast<float>(node["/*{{{ VALUE compress_param_name }}}*/"].getFlt()));
+        bitStream.push_flt_str(node["/*{{{ VALUE compress_param_name }}}*/"].getFltStr());
     }
     else
     {
@@ -177,7 +178,8 @@ BitStream compress(std::string const & json_content)
     if(node.contains("/*{{{ VALUE compress_param_name }}}*/"))
     {
         bitStream.push(true);
-        bitStream.push(node["/*{{{ VALUE compress_param_name }}}*/"].getFlt());
+        //bitStream.push(node["/*{{{ VALUE compress_param_name }}}*/"].getFlt());
+        bitStream.push_flt_str(node["/*{{{ VALUE compress_param_name }}}*/"].getFltStr());
     }
     else
     {
@@ -208,10 +210,12 @@ BitStream compress(std::string const & json_content)
             bitStream.push(node["/*{{{ VALUE property_name }}}*/"][i].getBool());
             /*{{{ END }}}*/
             // /*{{{ IF /*{{{ VALUE compress_param_array_type }}}*/ == float }}}*/
-            bitStream.push(static_cast<float>(node["/*{{{ VALUE property_name }}}*/"][i].getFlt()));
+            //bitStream.push(static_cast<float>(node["/*{{{ VALUE property_name }}}*/"][i].getFlt()));
+            bitStream.push_flt_str(node["/*{{{ VALUE property_name }}}*/"][i].getFltStr());
             /*{{{ END }}}*/
             // /*{{{ IF /*{{{ VALUE compress_param_array_type }}}*/ == double }}}*/
-            bitStream.push(node["/*{{{ VALUE property_name }}}*/"][i].getFlt());
+            //bitStream.push(node["/*{{{ VALUE property_name }}}*/"][i].getFlt());
+            bitStream.push_flt_str(node["/*{{{ VALUE property_name }}}*/"][i].getFltStr());
             /*{{{ END }}}*/
         }
     }

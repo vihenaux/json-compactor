@@ -26,6 +26,8 @@ class BitStream
     void push_16_int(unsigned int value);
     void push_32_int(unsigned int value);
 
+    void push_flt_str(std::string const & value);
+
     void push_very_short_str(std::string const & value);
     void push_short_str(std::string const & value);
 
@@ -34,6 +36,7 @@ class BitStream
     char get_char();
     float get_float();
     double get_double();
+    std::string get_flt_str();
     unsigned int get_2_int();
     unsigned int get_4_int();
     unsigned int get_8_int();

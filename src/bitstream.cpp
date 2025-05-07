@@ -162,6 +162,22 @@ void BitStream::push_32_int(unsigned int value)
     push(static_cast<uint8_t>(value));
 }
 
+void BitStream::push_flt_str(std::string const & value)
+{
+    for(unsigned int i(0); i < value.size(); ++i)
+    {
+        if(value[i] == '.')
+        {
+            push_4_int(10ul);
+        }
+        else
+        {
+            push_4_int(static_cast<unsigned int>(value[i] - '0'));
+        }
+    }
+    push_4_int(15);
+}
+
 void BitStream::push_very_short_str(std::string const & value)
 {
     push_4_int(static_cast<unsigned int>(value.size()));
@@ -237,6 +253,25 @@ double BitStream::get_double()
 {
     uint64_t value = get_64_int();
     return *(reinterpret_cast<double*>(&value));
+}
+
+std::string BitStream::get_flt_str()
+{
+    std::string res;
+    unsigned int tmp = get_4_int();
+    while(tmp != 15)
+    {
+        if(tmp == 10)
+        {
+            res.push_back('.');
+        }
+        else
+        {
+            res.push_back(static_cast<char>('0' + tmp));
+        }
+        tmp = get_4_int();
+    }
+    return res;
 }
 
 unsigned int BitStream::get_2_int()

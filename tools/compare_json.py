@@ -1,9 +1,8 @@
 import json
 import sys
-import math
 
 def compare_float(float1, float2):
-    return math.isclose(float1, float2, abs_tol=0.01)
+    return float1 == float2
 
 def compare_array(array1, array2):
     if len(array1) != len(array2):

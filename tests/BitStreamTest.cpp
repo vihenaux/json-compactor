@@ -44,6 +44,8 @@ int main()
     s.push(std::string("not so short str"));
     s.push(std::string("A very long string to show that the BitStream class is able to store any sizes of strings. But this is not nearly enough to prove that still. Therefore I need to continue writing sentences until I hit the 256 char mark. We a bit past 200 right now, just a bit more. And that should be it."));
 
+    s.push_flt_str("1345.86562");
+
     if(!s.get_bool())
         std::cerr << "\033[31mError 1" << std::endl;
     if(!s.get_bool())
@@ -106,6 +108,9 @@ int main()
         std::cerr << "\033[31mError 26" << std::endl;
     if(s.get_str() != std::string("A very long string to show that the BitStream class is able to store any sizes of strings. But this is not nearly enough to prove that still. Therefore I need to continue writing sentences until I hit the 256 char mark. We a bit past 200 right now, just a bit more. And that should be it."))
         std::cerr << "\033[31mError 27" << std::endl;
+
+    if(s.get_flt_str() != "1345.86562")
+        std::cerr << "\033[31mError 28" << std::endl;
 
     BitStream to_save;
     to_save.push(1ull);
