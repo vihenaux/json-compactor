@@ -70,7 +70,6 @@ any_type::Any decompress(std::string const & compressed_file_path)
 // /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == float}}}*/
     if(bitStream.get_bool())
     {
-        //object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any(static_cast<double>(bitStream.get_float())));
         std::string tmp_flt_str = bitStream.get_flt_str();
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any(std::stod(tmp_flt_str), tmp_flt_str));
     }
@@ -85,7 +84,6 @@ any_type::Any decompress(std::string const & compressed_file_path)
 // /*{{{ IF /*{{{ VALUE decompress_param_type }}}*/ == double }}}*/
     if(bitStream.get_bool())
     {
-        //object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any(bitStream.get_double()));
         std::string tmp_flt_str = bitStream.get_flt_str();
         object_to_return.add("/*{{{ VALUE decompress_param_name }}}*/", any_type::Any(std::stod(tmp_flt_str), tmp_flt_str));
     }
@@ -117,12 +115,10 @@ any_type::Any decompress(std::string const & compressed_file_path)
             array_items.add(bitStream.get_bool());
             /*{{{ END }}}*/
             // /*{{{ IF /*{{{ VALUE decompress_param_array_type }}}*/ == float }}}*/
-            //array_items.add(static_cast<double>(bitStream.get_float()));
             std::string tmp_flt_str = bitStream.get_flt_str();
             array_items.add(any_type::Any(std::stod(tmp_flt_str), tmp_flt_str));
             /*{{{ END }}}*/
             // /*{{{ IF /*{{{ VALUE decompress_param_array_type }}}*/ == double }}}*/
-            //array_items.add(bitStream.get_double());
             std::string tmp_flt_str = bitStream.get_flt_str();
             array_items.add(any_type::Any(std::stod(tmp_flt_str), tmp_flt_str));
             /*{{{ END }}}*/

@@ -1,0 +1,43 @@
+{
+    "type": "object",
+    "properties": {
+        "g34iNq": {
+            "type": "boolean"
+        },
+        "gJvEz": {
+            "type": "double"
+        },
+        "629zASr1": {
+            "type": "string"
+        },
+        "S02Nb": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "u8AwQxP": {
+                        "type": "boolean"
+                    },
+                    "mJdeh": {
+                        "type": "array",
+                        "items": {
+                            "type": "boolean"
+                        }
+                    },
+                    "4XgiS": {
+                        "type": "boolean"
+                    },
+                    "JpMZRq": {
+                        "type": "float"
+                    }
+                }
+            }
+        },
+        "0kOR6": {
+            "type": "array",
+            "items": {
+                "type": "integer"
+            }
+        }
+    }
+}

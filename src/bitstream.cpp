@@ -122,10 +122,228 @@ void BitStream::push(unsigned long long value)
 
 void BitStream::push(std::string const & value)
 {
-    push(static_cast<unsigned long long>(value.size()));
-    for(unsigned long long i(0); i < value.size(); ++i)
+    bool contains_value_0 = false;
+    bool contains_ALPHA = false;
+    bool contains_alpha = false;
+    bool contains_point = false;
+    bool contains_num = false;
+    bool contains_punctuation = false;
+    bool contains_special = false;
+    bool contains_other = false;
+
+    for(unsigned int i(0); i < value.size(); ++i)
     {
-        push(value[i]);
+        switch(value[i])
+        {
+            case '\0':
+                contains_value_0 = true;
+                break;
+            case 'A':
+            case 'B':
+            case 'C':
+            case 'D':
+            case 'E':
+            case 'F':
+            case 'G':
+            case 'H':
+            case 'I':
+            case 'J':
+            case 'K':
+            case 'L':
+            case 'M':
+            case 'N':
+            case 'O':
+            case 'P':
+            case 'Q':
+            case 'R':
+            case 'S':
+            case 'T':
+            case 'U':
+            case 'V':
+            case 'W':
+            case 'X':
+            case 'Y':
+            case 'Z':
+                contains_ALPHA = true;
+                break;
+            case 'a':
+            case 'b':
+            case 'c':
+            case 'd':
+            case 'e':
+            case 'f':
+            case 'g':
+            case 'h':
+            case 'i':
+            case 'j':
+            case 'k':
+            case 'l':
+            case 'm':
+            case 'n':
+            case 'o':
+            case 'p':
+            case 'q':
+            case 'r':
+            case 's':
+            case 't':
+            case 'u':
+            case 'v':
+            case 'x':
+            case 'y':
+            case 'z':
+                contains_alpha = true;
+                break;
+            case '.':
+                contains_point = true;
+                break;
+            case '0':
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                contains_num = true;
+                break;
+            case '!':
+            case '?':
+            case ':':
+            case ';':
+            case ',':
+            case '"':
+            case '-':
+                contains_punctuation = true;
+                break;
+            case '&':
+            case '~':
+            case '#':
+            case '\'':
+            case '{':
+            case '}':
+            case '(':
+            case ')':
+            case '[':
+            case ']':
+            case '_':
+            case '|':
+            case '+':
+            case '=':
+            case '\\':
+            case '/':
+            case '*':
+            case '%':
+                contains_special = true;
+                break;
+            default:
+                contains_other = true;
+                break;
+        }
+    }
+
+    if(contains_other)
+    {
+        contains_point = false;
+        contains_ALPHA = false;
+        contains_alpha = false;
+        contains_num = false;
+        contains_punctuation = false;
+        contains_special = false;
+    }
+    if(contains_point && ! contains_num)
+    {
+        contains_punctuation = true;
+    }
+
+    push(contains_value_0);
+    push(contains_ALPHA);
+    push(contains_alpha);
+    push(contains_num);
+    push(contains_punctuation);
+    push(contains_special);
+
+    if(contains_value_0)
+    {
+        push(static_cast<unsigned long long>(value.size()));
+    }
+
+    if(!contains_ALPHA && !contains_alpha && !contains_num && !contains_punctuation && !contains_special)
+    {
+        for(unsigned long long i(0); i < value.size(); ++i)
+        {
+            push(value[i]);
+        }
+
+        if(!contains_value_0)
+        {
+            push('\0');
+        }
+    }
+    else
+    {
+        std::vector<char> char_set({'\0'});
+        if(contains_ALPHA)
+        {
+            char_set.insert(char_set.end(), {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'});
+        }
+        if(contains_alpha)
+        {
+            char_set.insert(char_set.end(), {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'});
+        }
+        if(contains_num)
+        {
+            char_set.insert(char_set.end(), {'0','1','2','3','4','5','6','7','8','9','.'});
+        }
+        if(contains_punctuation)
+        {
+            char_set.insert(char_set.end(), {'!','.','?',':',';',',','"'});
+        }
+        if(contains_special)
+        {
+            char_set.insert(char_set.end(), {'&','~','#','\'','{','}','(',')','[',']','_','|','+','=','\\','/','*','%','-'});
+        }
+
+        auto push_next_char_index = [this, &char_set](unsigned int index)
+        {
+            if(char_set.size() <= 4)
+            {
+                this->push_2_int(index);
+            }
+            else if(char_set.size() <= 8)
+            {
+                this->push_3_int(index);
+            }
+            else if(char_set.size() <= 16)
+            {
+                this->push_4_int(index);
+            }
+            else if(char_set.size() <= 32)
+            {
+                this->push_5_int(index);
+            }
+            else if(char_set.size() <= 64)
+            {
+                this->push_6_int(index);
+            }
+            else if(char_set.size() <= 128)
+            {
+                this->push_7_int(index);
+            }
+        };
+
+        for(unsigned int i(0); i < value.size(); ++i)
+        {
+            for(unsigned int j(0); j < char_set.size(); ++j)
+            {
+                if(char_set[j] == value[i])
+                {
+                    push_next_char_index(j);
+                }
+            }
+        }
+        push_next_char_index(0);
     }
 }
 
@@ -135,8 +353,45 @@ void BitStream::push_2_int(unsigned int value)
     push(static_cast<bool>(value%2));
 }
 
+void BitStream::push_3_int(unsigned int value)
+{
+    push(static_cast<bool>((value >> 2)%2));
+    push(static_cast<bool>((value >> 1)%2));
+    push(static_cast<bool>(value%2));
+}
+
 void BitStream::push_4_int(unsigned int value)
 {
+    push(static_cast<bool>((value >> 3)%2));
+    push(static_cast<bool>((value >> 2)%2));
+    push(static_cast<bool>((value >> 1)%2));
+    push(static_cast<bool>((value)%2));
+}
+
+void BitStream::push_5_int(unsigned int value)
+{
+    push(static_cast<bool>((value >> 4)%2));
+    push(static_cast<bool>((value >> 3)%2));
+    push(static_cast<bool>((value >> 2)%2));
+    push(static_cast<bool>((value >> 1)%2));
+    push(static_cast<bool>((value)%2));
+}
+
+void BitStream::push_6_int(unsigned int value)
+{
+    push(static_cast<bool>((value >> 5)%2));
+    push(static_cast<bool>((value >> 4)%2));
+    push(static_cast<bool>((value >> 3)%2));
+    push(static_cast<bool>((value >> 2)%2));
+    push(static_cast<bool>((value >> 1)%2));
+    push(static_cast<bool>((value)%2));
+}
+
+void BitStream::push_7_int(unsigned int value)
+{
+    push(static_cast<bool>((value >> 6)%2));
+    push(static_cast<bool>((value >> 5)%2));
+    push(static_cast<bool>((value >> 4)%2));
     push(static_cast<bool>((value >> 3)%2));
     push(static_cast<bool>((value >> 2)%2));
     push(static_cast<bool>((value >> 1)%2));
@@ -279,9 +534,50 @@ unsigned int BitStream::get_2_int()
     return (static_cast<unsigned int>(get_bool()) << 1) + static_cast<unsigned int>(get_bool());
 }
 
+unsigned int BitStream::get_3_int()
+{
+    return (static_cast<unsigned int>(get_bool()) << 2) + (static_cast<unsigned int>(get_bool()) << 1) + static_cast<unsigned int>(get_bool());
+}
+
 unsigned int BitStream::get_4_int()
 {
     unsigned int x = static_cast<unsigned int>(get_bool()) << 3;
+    x += static_cast<unsigned int>(get_bool()) << 2;
+    x += static_cast<unsigned int>(get_bool()) << 1;
+    x += static_cast<unsigned int>(get_bool());
+
+    return x;
+}
+
+unsigned int BitStream::get_5_int()
+{
+    unsigned int x = static_cast<unsigned int>(get_bool()) << 4;
+    x += static_cast<unsigned int>(get_bool()) << 3;
+    x += static_cast<unsigned int>(get_bool()) << 2;
+    x += static_cast<unsigned int>(get_bool()) << 1;
+    x += static_cast<unsigned int>(get_bool());
+
+    return x;
+}
+
+unsigned int BitStream::get_6_int()
+{
+    unsigned int x = static_cast<unsigned int>(get_bool()) << 5;
+    x += static_cast<unsigned int>(get_bool()) << 4;
+    x += static_cast<unsigned int>(get_bool()) << 3;
+    x += static_cast<unsigned int>(get_bool()) << 2;
+    x += static_cast<unsigned int>(get_bool()) << 1;
+    x += static_cast<unsigned int>(get_bool());
+
+    return x;
+}
+
+unsigned int BitStream::get_7_int()
+{
+    unsigned int x = static_cast<unsigned int>(get_bool()) << 6;
+    x += static_cast<unsigned int>(get_bool()) << 5;
+    x += static_cast<unsigned int>(get_bool()) << 4;
+    x += static_cast<unsigned int>(get_bool()) << 3;
     x += static_cast<unsigned int>(get_bool()) << 2;
     x += static_cast<unsigned int>(get_bool()) << 1;
     x += static_cast<unsigned int>(get_bool());
@@ -353,14 +649,112 @@ std::string BitStream::get_short_str()
 
 std::string BitStream::get_str()
 {
-    unsigned long long size = get_int();
     std::string str;
 
-    for(unsigned long long i(0); i < size; ++i)
+    bool contains_value_0 = get_bool();
+    bool contains_ALPHA = get_bool();
+    bool contains_alpha = get_bool();
+    bool contains_num = get_bool();
+    bool contains_punctuation = get_bool();
+    bool contains_special = get_bool();
+    unsigned long long str_size = 0;
+
+    if(contains_value_0)
     {
-        str.push_back(get_char());
+        str_size = get_int();
     }
 
+    if(!contains_ALPHA && !contains_alpha && !contains_num &&
+        !contains_punctuation && ! contains_special)
+    {
+        if(contains_value_0)
+        {
+            for(unsigned long long i(0); i < str_size; ++i)
+            {
+                str.push_back(get_char());
+            }
+        }
+        else
+        {
+            char tmp = get_char();
+            while(tmp != '\0')
+            {
+                str.push_back(tmp);
+                tmp = get_char();
+            }
+        }
+    }
+    else
+    {
+        std::vector<char> char_set({'\0'});
+        if(contains_ALPHA)
+        {
+            char_set.insert(char_set.end(), {'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'});
+        }
+        if(contains_alpha)
+        {
+            char_set.insert(char_set.end(), {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'});
+        }
+        if(contains_num)
+        {
+            char_set.insert(char_set.end(), {'0','1','2','3','4','5','6','7','8','9','.'});
+        }
+        if(contains_punctuation)
+        {
+            char_set.insert(char_set.end(), {'!','.','?',':',';',',','"','-'});
+        }
+        if(contains_special)
+        {
+            char_set.insert(char_set.end(), {'&','~','#','\'','{','}','(',')','[',']','_','|','+','=','\\','/','*','%'});
+        }
+
+        auto get_next_char = [this, &char_set]() -> char
+        {
+            if(char_set.size() <= 4)
+            {
+                return char_set[get_2_int()];
+            }
+            else if(char_set.size() <= 8)
+            {
+                return char_set[get_3_int()];
+            }
+            else if(char_set.size() <= 16)
+            {
+                return char_set[get_4_int()];
+            }
+            else if(char_set.size() <= 32)
+            {
+                return char_set[get_5_int()];
+            }
+            else if(char_set.size() <= 64)
+            {
+                return char_set[get_6_int()];
+            }
+            else if(char_set.size() <= 128)
+            {
+                return char_set[get_7_int()];
+            }
+
+            return char_set[static_cast<unsigned int>(get_char())];
+        };
+
+        if(contains_value_0)
+        {
+            for(unsigned long long i(0); i < str_size; ++i)
+            {
+                str.push_back(get_next_char());
+            }
+        }
+        else
+        {
+            char tmp = get_next_char();
+            while(tmp != '\0')
+            {
+                str.push_back(tmp);
+                tmp = get_next_char();
+            }
+        }
+    }
     return str;
 }
 

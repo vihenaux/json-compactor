@@ -89,6 +89,7 @@ def main(nb_test_to_run):
             for x in range(len(test["test_files"])):
                 print(test["test_files"][x], " : ", result[x])
             tests_succeeded = False
+            break
 
     if not tests_succeeded:
         return
