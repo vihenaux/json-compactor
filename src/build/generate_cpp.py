@@ -11,7 +11,7 @@ def generate():
         if len(current_dir) > 3:
             os.makedirs("generated_src/"+current_dir[3:], exist_ok=True)
         for file in files:
-            generate_file.generate_file_from_lib(current_dir+"/"+file, "../../files/test-schema.json", "generated_src/"+current_dir[3:]+file, "gcg_key")
+            generate_file.generate_file_from_lib(current_dir+"/"+file, "../../files/test-schema.json", "generated_src/"+current_dir[3:]+"/"+file, "gcg_key")
 
 
 if __name__ == "__main__":
